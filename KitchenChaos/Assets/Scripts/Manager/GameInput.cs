@@ -11,6 +11,8 @@ public class GameInput : MonoBehaviour
     private PlayerInputAction playerInputController;
     //声明一个OnInteract事件，当玩家按下交互键时触发该事件
     public event EventHandler OnInteractAction;
+    //声明一个OnInteract事件，当玩家按下第二交互键时触发该事件
+    public event EventHandler OnInteractAltmateAction;
 
     //Awake时实例化InputActionAsset
     private void Awake()
@@ -22,6 +24,10 @@ public class GameInput : MonoBehaviour
         playerInputController.Player.Interact.performed += context =>
         {
             OnInteractAction?.Invoke(this, EventArgs.Empty);
+        };
+        playerInputController.Player.InteractAltmate.performed += context =>
+        {
+            OnInteractAltmateAction?.Invoke(this, EventArgs.Empty);
         };
     }
     //Enable时启用InputActionAsset

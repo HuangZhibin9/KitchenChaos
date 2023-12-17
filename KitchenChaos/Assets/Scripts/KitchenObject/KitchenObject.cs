@@ -49,4 +49,25 @@ public class KitchenObject : MonoBehaviour
         return kitchenParent;
     }
 
+    //销毁物体
+    public void DestroyKitchenObject()
+    {
+        //清空父物体的kitchenObject
+        kitchenParent.ClearKitchenObject();
+        //销毁物体
+        Destroy(this.gameObject);
+    }
+
+    //静态方法 生成物体
+    public static KitchenObject InstantiateKitchenObject(KitchenObjectSO kitchenObjectSO, IKitchenObjectParent kitchenObjectParent)
+    {
+        //生成物体
+        Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
+        //设置该物体所属的柜台
+        KitchenObject kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
+        kitchenObject.SetKitchenObjectParent(kitchenObjectParent);
+        //返回物体
+        return kitchenObject;
+    }
+
 }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ContainerCounter : BaseCounter, IKitchenObjectParent
+public class ContainerCounter : BaseCounter
 {
     //获取所要产生的物体配置
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
@@ -13,12 +13,10 @@ public class ContainerCounter : BaseCounter, IKitchenObjectParent
     //柜台的交互方法
     public override void Interact(Player player)
     {
-        if (!HasKitchenObject())
+        if (!player.HasKitchenObject())
         {
-            //生成物体
-            Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
-            //设置该物体所属的柜台
-            kitchenObjectTransform.GetComponent<KitchenObject>().SetKitchenObjectParent(player);
+            //生成物品
+            KitchenObject.InstantiateKitchenObject(kitchenObjectSO, player);
             //触发OnKitchenObjectInstantiate事件
             OnKitchenObjectInstantiate?.Invoke(this, EventArgs.Empty);
         }

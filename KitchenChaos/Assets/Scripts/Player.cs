@@ -60,9 +60,58 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     {
         //为OnInteractAction事件添加监听
         gameInput.OnInteractAction += OnGameInputInteract;
+        gameInput.OnInteractAltmateAction += OnGameInputInteractAltmate;
     }
 
+    //当OnteractAltmateAction事件触发时，调用OnGameInputInteractAltmate()方法，完成与柜台的交互
+    private void OnGameInputInteractAltmate(object sender, EventArgs e)
+    {
+        //获取角色前进的方向
+        Vector3 direction = gameInput.GetDirection();
+        //可交互的最大距离
+        float maxDistance = 1.5f;
+        //如果玩家在移动，即direction不为0
+        if (direction != Vector3.zero)
+        {
+            //将lastDirection设置为direction
+            lastDirection = direction;
+        }
 
+        //射线检测前方是否有物体
+        if (Physics.Raycast(transform.position, lastDirection, out RaycastHit hit, maxDistance, layerMask))
+        {
+            if (hit.collider.TryGetComponent<BaseCounter>(out BaseCounter baseCounter))
+            {
+                //如果检测到的物体有BaseCounter组件，则调用InteractAltmate()方法
+                baseCounter.InteractAltmate(this);
+            }
+        }
+    }
+
+    //当OnteractAction事件触发时，调用OnGameInputInteract()方法，完成与柜台的交互
+    private void OnGameInputInteract(object sender, EventArgs e)
+    {
+        //获取角色前进的方向
+        Vector3 direction = gameInput.GetDirection();
+        //可交互的最大距离
+        float maxDistance = 1.5f;
+        //如果玩家在移动，即direction不为0
+        if (direction != Vector3.zero)
+        {
+            //将lastDirection设置为direction
+            lastDirection = direction;
+        }
+
+        //射线检测前方是否有物体
+        if (Physics.Raycast(transform.position, lastDirection, out RaycastHit hit, maxDistance, layerMask))
+        {
+            if (hit.collider.TryGetComponent<BaseCounter>(out BaseCounter baseCounter))
+            {
+                //如果检测到的物体有ClearCounter组件，则调用Interact()方法
+                baseCounter.Interact(this);
+            }
+        }
+    }
 
     private void Update()
     {
@@ -117,30 +166,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedArgs { _selectedCounter = selectedCounter });
     }
 
-    //当OnteractAction事件触发时，调用OnGameInputInteract()方法，完成与柜台的交互
-    private void OnGameInputInteract(object sender, EventArgs e)
-    {
-        //获取角色前进的方向
-        Vector3 direction = gameInput.GetDirection();
-        //可交互的最大距离
-        float maxDistance = 1.5f;
-        //如果玩家在移动，即direction不为0
-        if (direction != Vector3.zero)
-        {
-            //将lastDirection设置为direction
-            lastDirection = direction;
-        }
 
-        //射线检测前方是否有物体
-        if (Physics.Raycast(transform.position, lastDirection, out RaycastHit hit, maxDistance, layerMask))
-        {
-            if (hit.collider.TryGetComponent<BaseCounter>(out BaseCounter baseCounter))
-            {
-                //如果检测到的物体有ClearCounter组件，则调用Interact()方法
-                baseCounter.Interact(this);
-            }
-        }
-    }
 
     //PositionAndRotationUpdate() WASD控制角色在地面上进行前后左右移动,WASD是世界坐标绝对方向
     public void PositionAndRotationUpdate()

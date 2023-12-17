@@ -14,6 +14,10 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     {
         Debug.LogError("Interact with BaseCounter!");
     }
+    public virtual void InteractAltmate(Player player)
+    {
+        Debug.LogError("InteractAltmate with BaseCounter!");
+    }
 
 
     //获取柜台上的物体
