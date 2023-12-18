@@ -21,6 +21,9 @@ public class CuttingCounter : BaseCounter
         public float cuttingProgressPercent;
     }
 
+    //切菜动作事件
+    public event EventHandler cuttingAction;
+
     //重写柜台的交互方法
     public override void Interact(Player player)
     {
@@ -61,6 +64,7 @@ public class CuttingCounter : BaseCounter
         {
             //切菜进度+1
             cuttingProgress++;
+            cuttingAction?.Invoke(this, EventArgs.Empty);
             //触发进度更改事件
             CuttingProgressChanged?.Invoke(this,
             new CuttingCounterEventArgs
