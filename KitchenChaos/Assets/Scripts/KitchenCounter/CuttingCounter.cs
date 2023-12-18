@@ -8,6 +8,10 @@ public class CuttingCounter : BaseCounter
     [SerializeField] private KitchenObjectSO cutKitchenObjectSO;
     //切菜的配方
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
+    //切菜的进度
+    private int cuttingProgress;
+    //当前对应的菜谱
+    private CuttingRecipeSO recipeSO;
 
     //重写柜台的交互方法
     public override void Interact(Player player)
@@ -23,6 +27,10 @@ public class CuttingCounter : BaseCounter
                 {
                     //把物品放在柜台上
                     player.GetKitchenObject().SetKitchenObjectParent(this);
+                    //切菜进度归零
+                    cuttingProgress = 0;
+                    //获取菜谱
+                    recipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
                 }
             }
         }
@@ -43,16 +51,33 @@ public class CuttingCounter : BaseCounter
         //如果柜台上有物品
         if (HasKitchenObject() && HasRecipeWithInput(GetKitchenObject().GetKitchenObjectSO()))
         {
-            KitchenObjectSO output = GetOutputKitchenObjectSO(GetKitchenObject().GetKitchenObjectSO());
-            //销毁原来物体
-            GetKitchenObject().DestroyKitchenObject();
-            //生成切之后的物体
-            KitchenObject.InstantiateKitchenObject(output, this);
+            cuttingProgress++;
+            if (cuttingProgress >= recipeSO.cuttingProgressMax)
+            {
+                //销毁原来物体
+                GetKitchenObject().DestroyKitchenObject();
+                //生成切之后的物体
+                KitchenObject.InstantiateKitchenObject(recipeSO.output, this);
+                recipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
+            }
         }
     }
 
-    //返回菜谱对应的生成KitchenObjectSO
-    private KitchenObjectSO GetOutputKitchenObjectSO(KitchenObjectSO input)
+    //是否有对应的菜谱
+    private bool HasRecipeWithInput(KitchenObjectSO input)
+    {
+        return GetCuttingRecipeSOWithInput(input) != null;
+    }
+
+    //获取对应菜谱的输出KitchenObjectSO
+    private KitchenObjectSO GetKitchenObjectSOWithInput(KitchenObjectSO input)
+    {
+        CuttingRecipeSO recipeSO = GetCuttingRecipeSOWithInput(input);
+        return recipeSO != null ? recipeSO.output : null;
+    }
+
+    //获取对应的菜谱
+    private CuttingRecipeSO GetCuttingRecipeSOWithInput(KitchenObjectSO input)
     {
         //遍历菜谱
         foreach (CuttingRecipeSO recipeSO in cuttingRecipeSOArray)
@@ -61,27 +86,10 @@ public class CuttingCounter : BaseCounter
             if (recipeSO.input == input)
             {
                 //返回输出
-                return recipeSO.output;
+                return recipeSO;
             }
         }
         //没找到返回null
         return null;
-    }
-
-    //是否有对应的菜谱
-    private bool HasRecipeWithInput(KitchenObjectSO input)
-    {
-        //遍历菜谱
-        foreach (CuttingRecipeSO recipeSO in cuttingRecipeSOArray)
-        {
-            //找到对应输入的菜谱
-            if (recipeSO.input == input)
-            {
-                //返回true
-                return true;
-            }
-        }
-        //没找到返回false
-        return false;
     }
 }
