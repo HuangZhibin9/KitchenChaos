@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,13 @@ public class CuttingCounter : BaseCounter
     private int cuttingProgress;
     //当前对应的菜谱
     private CuttingRecipeSO recipeSO;
+
+    //进度更改事件
+    public event EventHandler<CuttingCounterEventArgs> CuttingProgressChanged;
+    public class CuttingCounterEventArgs : EventArgs
+    {
+        public float cuttingProgressPercent;
+    }
 
     //重写柜台的交互方法
     public override void Interact(Player player)
@@ -51,7 +59,15 @@ public class CuttingCounter : BaseCounter
         //如果柜台上有物品
         if (HasKitchenObject() && HasRecipeWithInput(GetKitchenObject().GetKitchenObjectSO()))
         {
+            //切菜进度+1
             cuttingProgress++;
+            //触发进度更改事件
+            CuttingProgressChanged?.Invoke(this,
+            new CuttingCounterEventArgs
+            {
+                cuttingProgressPercent = (float)cuttingProgress / recipeSO.cuttingProgressMax
+            });
+            //如果切菜进度达到最大值
             if (cuttingProgress >= recipeSO.cuttingProgressMax)
             {
                 //销毁原来物体
