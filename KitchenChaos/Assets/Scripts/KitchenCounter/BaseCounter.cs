@@ -16,7 +16,7 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     }
     public virtual void InteractAltmate(Player player)
     {
-        Debug.LogError("InteractAltmate with BaseCounter!");
+        //Debug.LogError("InteractAltmate with BaseCounter!");
     }
 
 

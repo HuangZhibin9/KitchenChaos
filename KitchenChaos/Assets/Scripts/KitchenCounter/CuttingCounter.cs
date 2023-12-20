@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CuttingCounter : BaseCounter
+public class CuttingCounter : BaseCounter, IHasProgress
 {
     //切之后的生成物体的SO
     [SerializeField] private KitchenObjectSO cutKitchenObjectSO;
@@ -15,11 +15,7 @@ public class CuttingCounter : BaseCounter
     private CuttingRecipeSO recipeSO;
 
     //进度更改事件
-    public event EventHandler<CuttingCounterEventArgs> CuttingProgressChanged;
-    public class CuttingCounterEventArgs : EventArgs
-    {
-        public float cuttingProgressPercent;
-    }
+    public event EventHandler<IHasProgress.IHasProgressEventArgs> progressChanged;
 
     //切菜动作事件
     public event EventHandler cuttingAction;
@@ -66,10 +62,10 @@ public class CuttingCounter : BaseCounter
             cuttingProgress++;
             cuttingAction?.Invoke(this, EventArgs.Empty);
             //触发进度更改事件
-            CuttingProgressChanged?.Invoke(this,
-            new CuttingCounterEventArgs
+            progressChanged?.Invoke(this,
+            new IHasProgress.IHasProgressEventArgs
             {
-                cuttingProgressPercent = (float)cuttingProgress / recipeSO.cuttingProgressMax
+                progressPercent = (float)cuttingProgress / recipeSO.cuttingProgressMax
             });
             //如果切菜进度达到最大值
             if (cuttingProgress >= recipeSO.cuttingProgressMax)
