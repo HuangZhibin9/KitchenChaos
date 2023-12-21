@@ -70,4 +70,22 @@ public class KitchenObject : MonoBehaviour
         return kitchenObject;
     }
 
+    //尝试获取盘子
+    public bool TryGetPlate(out PlateKitchenObject plateKitchenObject)
+    {
+        //如果该物体是盘子
+        if (this is PlateKitchenObject)
+        {
+            //返回该物体
+            plateKitchenObject = this as PlateKitchenObject;
+            return true;
+        }
+        //如果该物体不是盘子
+        else
+        {
+            //返回空
+            plateKitchenObject = null;
+            return false;
+        }
+    }
 }

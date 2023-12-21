@@ -50,6 +50,19 @@ public class CuttingCounter : BaseCounter, IHasProgress
                 //把柜台上的物品放在手上
                 GetKitchenObject().SetKitchenObjectParent(player);
             }
+            //如果玩家手里有物品
+            else
+            {
+                //如果玩家手里的物品是盘子
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                {
+                    //把柜台上的物品放在盘子里
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
+                    {
+                        GetKitchenObject().DestroyKitchenObject();
+                    }
+                }
+            }
         }
     }
     //重写柜台的第二交互方法

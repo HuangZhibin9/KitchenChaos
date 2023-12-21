@@ -126,6 +126,26 @@ public class StoveCounter : BaseCounter, IHasProgress
                         progressPercent = 0f
                     });
             }
+            //如果玩家手里有物品
+            else
+            {
+                //如果玩家手里的物品是盘子
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                {
+                    //把柜台上的物品放在盘子里
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
+                    {
+                        GetKitchenObject().DestroyKitchenObject();
+                        state = StoveState.Idle;
+                        StoveStateChanged?.Invoke(state);
+                        progressChanged?.Invoke(this,
+                            new IHasProgress.IHasProgressEventArgs
+                            {
+                                progressPercent = 0f
+                            });
+                    }
+                }
+            }
         }
     }
 
