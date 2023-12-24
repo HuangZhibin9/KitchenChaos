@@ -20,6 +20,9 @@ public class DeliveryManager : MonoSingleton<DeliveryManager>
     //菜谱产生事件和完成事件
     public event Action recipeSpawned;
     public event Action recipeListCompleted;
+    //提交菜品成功或失败事件
+    public event Action recipeListSucceeded;
+    public event Action recipeListFailed;
 
     private void Awake()
     {
@@ -62,9 +65,11 @@ public class DeliveryManager : MonoSingleton<DeliveryManager>
                 waitingRecipeSOList.Remove(recipeSO);
                 Debug.Log("送餐成功");
                 recipeListCompleted?.Invoke();
+                recipeListSucceeded?.Invoke();
                 return;
             }
         }
+        recipeListFailed?.Invoke();
         Debug.Log("送餐失败");
     }
 

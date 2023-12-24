@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3907050954972218819}
   - component: {fileID: 6129808381205323667}
+  - component: {fileID: 7137822809363991838}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -55,6 +56,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   playerHandPoint: {fileID: 8375427064249115667}
+--- !u!114 &7137822809363991838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4613642088789217152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd18b7404e5692a4b91aab9864ca3cb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8086135253806387765
 GameObject:
   m_ObjectHideFlags: 0

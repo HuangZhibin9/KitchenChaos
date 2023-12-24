@@ -31,6 +31,9 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         public BaseCounter _selectedCounter;
     }
 
+    //拿起物品触发事件
+    public event Action pickUpSomething;
+
 
     [Header("玩家移动参数")]
     [SerializeField] private float playerHeight;
@@ -66,6 +69,11 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     //当OnteractAltmateAction事件触发时，调用OnGameInputInteractAltmate()方法，完成与柜台的交互
     private void OnGameInputInteractAltmate(object sender, EventArgs e)
     {
+        if (!GameManager.Instance.IsGamePlaying())
+        {
+            return;
+        }
+
         //获取角色前进的方向
         Vector3 direction = gameInput.GetDirection();
         //可交互的最大距离
@@ -91,6 +99,10 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     //当OnteractAction事件触发时，调用OnGameInputInteract()方法，完成与柜台的交互
     private void OnGameInputInteract(object sender, EventArgs e)
     {
+        if (!GameManager.Instance.IsGamePlaying())
+        {
+            return;
+        }
         //获取角色前进的方向
         Vector3 direction = gameInput.GetDirection();
         //可交互的最大距离
@@ -230,6 +242,11 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     public void SetKitchenObject(KitchenObject kitchenObject)
     {
         this.kitchenObject = kitchenObject;
+
+        if (kitchenObject != null)
+        {
+            pickUpSomething?.Invoke();
+        }
     }
     //是否已经有物体
     public bool HasKitchenObject()

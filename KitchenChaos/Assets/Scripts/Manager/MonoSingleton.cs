@@ -29,12 +29,12 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
         }
         DontDestroyOnLoad(this.gameObject);
         instance = this.gameObject.GetComponent<T>();
-        this.OnStart();
+        OnStart();
     }
 
     protected virtual void OnStart()
     {
-
+        
     }
 
     // Update is called once per frame

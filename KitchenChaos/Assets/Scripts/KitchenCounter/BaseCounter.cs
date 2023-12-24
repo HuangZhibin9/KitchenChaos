@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,9 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
 
     // 桌上的物体
     private KitchenObject kitchenObject = null;
+
+    //放下物品的事件
+    public static event Action<BaseCounter> anyObjectPlacedHere;
 
     public virtual void Interact(Player player)
     {
@@ -29,6 +33,10 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     public void SetKitchenObject(KitchenObject kitchenObject)
     {
         this.kitchenObject = kitchenObject;
+        if (kitchenObject != null)
+        {
+            anyObjectPlacedHere?.Invoke(this);
+        }
     }
     //是否已经有物体
     public bool HasKitchenObject()
