@@ -11,6 +11,8 @@ public class DeliveryManager : MonoSingleton<DeliveryManager>
     private List<RecipeSO> waitingRecipeSOList;
     //等待送餐的食谱的最大数量
     [SerializeField] private int waitingRecipeMax = 4;
+    //成功送餐的数量
+    private int recipeFinishedCount = 0;
 
     //产生食谱的计时器
     private float spawnRecipeTimer;
@@ -63,7 +65,7 @@ public class DeliveryManager : MonoSingleton<DeliveryManager>
             {
                 //将食谱从等待送餐的食谱列表中移除
                 waitingRecipeSOList.Remove(recipeSO);
-                Debug.Log("送餐成功");
+                recipeFinishedCount++;
                 recipeListCompleted?.Invoke();
                 recipeListSucceeded?.Invoke();
                 return;
@@ -95,5 +97,9 @@ public class DeliveryManager : MonoSingleton<DeliveryManager>
     public List<RecipeSO> GetWaitingRecipeSOList()
     {
         return waitingRecipeSOList;
+    }
+    public int GetRecipeFinishedCount()
+    {
+        return recipeFinishedCount;
     }
 }

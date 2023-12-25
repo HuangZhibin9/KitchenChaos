@@ -22,7 +22,6 @@ public class DeliveryManagerUI : MonoBehaviour
 
     private void OnDisable()
     {
-        Debug.Log(DeliveryManager.Instance);
         if (DeliveryManager.Instance != null)
         {
             DeliveryManager.Instance.recipeSpawned -= UpdateVisual;

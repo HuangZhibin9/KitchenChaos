@@ -17,10 +17,13 @@ public class GameManager : MonoSingleton<GameManager>
 
     [SerializeField] private float waittingToStartTimer = 1f;
     [SerializeField] private float countDownTimer = 3f;
-    [SerializeField] private float gamePlayingTimer = 10f;
+    [SerializeField] private float gamePlayingTimer;
+    [SerializeField] private float gamePlayingTimerMax = 10f;
 
     //游戏状态改变事件
     public event Action<GameState> GameStateChanged;
+    //游戏剩余事件改变事件
+    public event Action<float> GamePlayingTimerChange;
 
     private void Awake()
     {
@@ -36,6 +39,7 @@ public class GameManager : MonoSingleton<GameManager>
                 if (waittingToStartTimer < 0f)
                 {
                     gameState = GameState.CountDown;
+                    gamePlayingTimer = gamePlayingTimerMax;
                     GameStateChanged?.Invoke(gameState);
                 }
                 break;
@@ -49,6 +53,7 @@ public class GameManager : MonoSingleton<GameManager>
                 break;
             case GameState.GamePlaying:
                 gamePlayingTimer -= Time.deltaTime;
+                GamePlayingTimerChange(gamePlayingTimer / gamePlayingTimerMax);
                 if (gamePlayingTimer < 0f)
                 {
                     gameState = GameState.GameOver;
